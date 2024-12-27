@@ -40,7 +40,7 @@ cv2.fillPoly(mask, [polygon], 255)
 cv2.imwrite('polygon_mask.png', mask)  # Optional: Save the mask if needed
 
 
-#--------------------------------xxxxx
+#---------------------------
 
 
 mask = cv2.imread('polygon_mask.png', cv2.IMREAD_GRAYSCALE)
