@@ -138,7 +138,9 @@ while True:
     left_cut = int(0.25 * width)  # skip left 20%
 
     # Perform the cropping
-    cropped_frame = frame[top_cut:height, left_cut:width]
+    cropped_frame_original = frame[top_cut:height, left_cut:width]
+
+    cropped_frame = cv2.resize(cropped_frame_original,(700,500))
 
     # Run YOLO on the cropped image
     results = model.predict(cropped_frame, conf=0.25, iou=0.45)
