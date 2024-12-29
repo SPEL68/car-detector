@@ -103,12 +103,23 @@ model = YOLO("yolov8n.pt")
 # We only want certain classes (COCO indices): car=2, motorcycle=3, bus=5, truck=7
 vehicle_classes = [2, 3, 5, 7]
 
+
+# Generate a timestamp for the CSV filename
+timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+csv_filename = f"vehicle_log_{timestamp}.csv"
+
 # Setup CSV logging
-csv_filename = "vehicle_log.csv"
 csv_file = open(csv_filename, mode="w", newline="", encoding="utf-8")
 writer = csv.writer(csv_file)
 writer.writerow(["Timestamp", "VehicleCount"])
 
+
+"""# Setup CSV logging
+csv_filename = "vehicle_log.csv"
+csv_file = open(csv_filename, mode="w", newline="", encoding="utf-8")
+writer = csv.writer(csv_file)
+writer.writerow(["Timestamp", "VehicleCount"])
+"""
 # Open the RTSP stream
 cap = cv2.VideoCapture(rtsp_url)
 if not cap.isOpened():
@@ -122,8 +133,13 @@ tracker = Sort(max_age=20, min_hits=3, iou_threshold=0.3)
 
 # Keep track of when each unique ID was first seen
 carCount = {}
+Skip_True =True
 
 while True:
+    if Skip_True: 
+        Skip_True = False
+        continue
+    Skip_True = True
 
     ret, frame = cap.read()
     if not ret:
