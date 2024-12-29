@@ -62,7 +62,9 @@ while True:
     resize = cv2.resize(image,(700,500))
 
     color_mask = np.zeros_like(resize)
+ 
     color_mask[mask == 255] = overlay_color
+    
 
     mask_added = cv2.addWeighted(resize, 1, color_mask, alpha, 0)
 

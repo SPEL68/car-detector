@@ -23,6 +23,8 @@ rtsp_url = "rtsp://Kamera02:sehvemdersmutterforbi@192.168.30.231:554/stream1"
 # Open the RTSP stream
 cap = cv2.VideoCapture(rtsp_url)
 
+"""
+
 # Create a blank image (mask) with the same dimensions as your 2K video stream
 height, width = 1296, 2304  # 2K resolution for Tapo C310
 mask = np.zeros((height, width), dtype=np.uint8)
@@ -37,6 +39,8 @@ cv2.fillPoly(mask, [polygon], 255)
 # Save or use the mask as needed
 cv2.imwrite('polygon_mask.png', mask)  # Optional: Save the mask if needed
 
+"""
+
 # Read the mask
 mask = cv2.imread('polygon_mask.png', cv2.IMREAD_GRAYSCALE)
 mask_for_detection = cv2.imread('polygon_mask.png')
@@ -47,7 +51,7 @@ alpha = 0.5  # Transparency factor (0: fully transparent, 1: fully opaque)
 
 tracker = Sort(max_age=20, min_hits=3, iou_threshold=0.3)
 
-limits = [350, 250, 550, 30]
+limits = [350, 250, 480, 30]
 
 totalCount = []
 
@@ -56,12 +60,14 @@ while True:
     if not success:
         break
 
-    resize = cv2.resize(image, (700, 500))
+    #resize = cv2.resize(image, (700, 500))
+    resize = cv2.resize(image, (640, 480))
 
     # Resize the mask to match the resized image dimensions
-    resized_mask = cv2.resize(mask, (700, 500), interpolation=cv2.INTER_NEAREST)
-    resized_mask_for_detection = cv2.resize(mask_for_detection, (700, 500), interpolation=cv2.INTER_NEAREST)
-
+    #resized_mask = cv2.resize(mask, (700, 500), interpolation=cv2.INTER_NEAREST)
+    #resized_mask_for_detection = cv2.resize(mask_for_detection, (700, 500), interpolation=cv2.INTER_NEAREST)
+    resized_mask = cv2.resize(mask, (640, 480), interpolation=cv2.INTER_NEAREST)
+    resized_mask_for_detection = cv2.resize(mask_for_detection, (640, 480), interpolation=cv2.INTER_NEAREST)
     color_mask = np.zeros_like(resize)
     color_mask[resized_mask == 255] = overlay_color
 
@@ -84,7 +90,7 @@ while True:
                 currentArray = np.array([x1, y1, x2, y2, currentConf])
                 detections = np.vstack((detections, currentArray))
     resultsTracker = tracker.update(detections)
-    cv2.line(mask_added, (350, 250), (550, 30), (0, 0, 255), 5)
+    cv2.line(mask_added, (350, 250), (480, 30), (0, 0, 255), 5)
     
 
     for result in resultsTracker:
