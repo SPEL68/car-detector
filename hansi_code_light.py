@@ -70,6 +70,7 @@ while True:
     if Skip_True: 
         Skip_True = False
         continue
+   
     Skip_True = True
     
     ret, frame = cap.read()
@@ -81,7 +82,7 @@ while True:
     frame = cv2.resize(frame, (640, 360))
 
     # Run YOLO on the resized frame
-    results = model.predict(frame, conf=0.5, iou=0.45)
+    results = model.predict(frame, conf=0.2, iou=0.45)
 
     # Gather detections (x1, y1, x2, y2, confidence) for classes of interest
     detections = np.empty((0, 5))
